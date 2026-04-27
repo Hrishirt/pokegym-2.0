@@ -18,4 +18,12 @@ class agentPlayer(Player):
         damage_multiplier = np.ones(4)
         best_pokemon = np.ones(6)
         active_matchup_score = 1
-        
+        # From docs adding a multipler for each move
+        for i, move in enumerate(battle.available_moves):
+            base_power[i] = move.base_power / 100
+            if battle.opponent_active_pokemon is not None:
+                damage_multiplier[i] = move.type.damage_multiplier(
+                    battle.opponent_active_pokemon.type_1,
+                    battle.opponent_active_pokemon.type_2,
+                    type_chart=GenData.from_gen(battle.gen).type_chart,
+                )
